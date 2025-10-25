@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_banking_frontend/auth/domain/entities/token_response.dart';
 import 'package:go_banking_frontend/auth/presentation/widgets/auth_form.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_banking_frontend/core/storage/token_storage.dart';
@@ -24,7 +25,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _checkToken() async {
-    final token = await _tokenStorage.getToken();
+    final token = await _tokenStorage.getRefreshToken();
     if (token != null && token.isNotEmpty) {
       if (mounted) {
         setState(() {
@@ -42,30 +43,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _accessDirectly() {
-    final authState = ref.read(authStateProvider);
-    if (authState) {
-      context.goNamed('Dashboard');
-    } else {
-      // Optionally, show a message that authentication is in progress
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Verificando tu sesión...')),
-      );
-    }
+    context.goNamed('Dashboard');
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authNotifierProvider, (prev, next) {
-      if (next is AsyncError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${next.error.toString()}')),
-        );
-      }
-      if (next is AsyncData && next.value != null && next.value is String) {
-        context.goNamed('Dashboard');
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(title: const Text('Iniciar Sesión')),
       body: Center(
@@ -82,7 +64,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _accessDirectly,
-                  child: const Text('Acceder directamente'),
+                  child: const Text('Acceder con biometría'),
                 ),
               ],
             ],
@@ -92,4 +74,3 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
-

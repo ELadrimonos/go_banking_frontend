@@ -1,4 +1,5 @@
 import 'package:go_banking_frontend/auth/data/datasources/auth_remote_datasources.dart';
+import 'package:go_banking_frontend/auth/domain/entities/token_response.dart';
 import 'package:go_banking_frontend/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -8,7 +9,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<String> login(String dni, String pin) {
+  Future<TokenResponse> login(String dni, String pin) {
     return remoteDataSource.login(dni, pin);
   }
 

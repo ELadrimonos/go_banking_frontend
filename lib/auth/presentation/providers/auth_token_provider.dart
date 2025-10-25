@@ -1,28 +1,34 @@
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_banking_frontend/core/storage/token_storage.dart';
 
 final authTokenProvider = StateNotifierProvider<AuthTokenNotifier, String?>((ref) {
-  return AuthTokenNotifier();
+  final tokenStorage = ref.watch(tokenStorageProvider);
+  return AuthTokenNotifier(tokenStorage);
+});
+
+final tokenStorageProvider = Provider<TokenStorage>((ref) {
+  return TokenStorage();
 });
 
 class AuthTokenNotifier extends StateNotifier<String?> {
-  final _tokenStorage = TokenStorage();
+  final TokenStorage _tokenStorage;
 
-  AuthTokenNotifier() : super(null) {
-    _loadToken();
+  AuthTokenNotifier(this._tokenStorage) : super(null);
+
+  Future<void> loadInitialToken() async {
+    state = await _tokenStorage.getAccessToken();
   }
 
-  Future<void> _loadToken() async {
-    state = await _tokenStorage.getToken();
+  Future<void> saveTokens(
+      {required String accessToken, required String refreshToken}) async {
+    await _tokenStorage.saveTokens(
+        accessToken: accessToken, refreshToken: refreshToken);
+    state = accessToken;
   }
 
-  Future<void> setToken(String token) async {
-    await _tokenStorage.saveToken(token);
-    state = token;
-  }
-
-  Future<void> clearToken() async {
-    await _tokenStorage.deleteToken();
+  Future<void> clearTokens() async {
+    await _tokenStorage.deleteAllTokens();
     state = null;
   }
 

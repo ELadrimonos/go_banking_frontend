@@ -1,17 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:go_banking_frontend/auth/domain/entities/token_response.dart';
 
 class AuthRemoteDataSource {
   final Dio dio;
 
   AuthRemoteDataSource(this.dio);
 
-  Future<String> login(String dni, String pin) async {
+  Future<TokenResponse> login(String dni, String pin) async {
     final response = await dio.post('/login', data: {
       'dni': dni,
       'pin': pin,
     });
 
-    return response.data['token'];
+    return TokenResponse.fromJson(response.data);
   }
 
   Future<Map<String, dynamic>> signup(String fullName, String dni, String email) async {

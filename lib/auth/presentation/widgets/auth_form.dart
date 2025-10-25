@@ -39,6 +39,7 @@ class _AuthFormState extends ConsumerState<AuthForm> {
         child: Form(
           key: _formKey,
           child: Column(
+            spacing: 16,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
@@ -88,7 +89,6 @@ class _AuthFormState extends ConsumerState<AuthForm> {
                   },
                   onSaved: (value) => _formData['pin'] = value ?? '',
                 ),
-              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: isLoading ? null : _trySubmit,
                 child: isLoading
