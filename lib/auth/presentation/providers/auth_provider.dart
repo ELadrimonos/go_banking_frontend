@@ -40,7 +40,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<dynamic>> {
     state = const AsyncValue.loading();
     try {
       final token = await _repo.login(dni, pin);
-      _tokenNotifier.setToken(token);
+      await _tokenNotifier.setToken(token);
       state = AsyncValue.data(token);
     } catch (e) {
       String errorMessage = e.toString();
@@ -63,7 +63,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<dynamic>> {
       // La lógica de redirección ahora comprueba este estado y no redirigirá
       // mientras se deba mostrar el modal del PIN.
       state = AsyncValue.data(SignupResult(pin: pin, token: token));
-      _tokenNotifier.setToken(token);
+      await _tokenNotifier.setToken(token);
     } catch (e) {
       String errorMessage = e.toString();
       if (e is DioException && e.response?.data != null) {
@@ -73,8 +73,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<dynamic>> {
     }
   }
 
-  void logout() {
-    _tokenNotifier.clearToken();
+  Future<void> logout() async {
+    await _tokenNotifier.clearToken();
     state = const AsyncValue.data(null);
   }
 
