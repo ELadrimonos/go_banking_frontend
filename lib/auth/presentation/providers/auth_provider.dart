@@ -4,14 +4,22 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_banking_frontend/auth/data/datasources/auth_remote_datasources.dart';
 import 'package:go_banking_frontend/auth/domain/repositories/auth_repository.dart';
 import 'package:go_banking_frontend/core/network/api_client.dart';
-import 'package:go_banking_frontend/core/storage/token_storage.dart';
-import '../../data/repositories/auth_repository_impl.dart';
+import 'package:go_banking_frontend/auth/data/repositories/auth_repository_impl.dart';
+import 'package:go_banking_frontend/auth/domain/entities/user.dart';
 import 'auth_token_provider.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final tokenStorage = ref.watch(tokenStorageProvider);
   final apiClient = ApiClient('http://localhost:8080', tokenStorage);
   return AuthRepositoryImpl(AuthRemoteDataSource(apiClient.dio));
+});
+
+final userProvider = FutureProvider<User?>((ref) async {
+  final authState = ref.watch(authStateProvider);
+  if (authState) {
+    return await ref.watch(authRepositoryProvider).getUser();
+  }
+  return null;
 });
 
 final authStateProvider = Provider<bool>((ref) {

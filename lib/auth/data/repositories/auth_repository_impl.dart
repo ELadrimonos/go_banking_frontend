@@ -1,5 +1,6 @@
 import 'package:go_banking_frontend/auth/data/datasources/auth_remote_datasources.dart';
 import 'package:go_banking_frontend/auth/domain/entities/token_response.dart';
+import 'package:go_banking_frontend/auth/domain/entities/user.dart';
 import 'package:go_banking_frontend/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -16,5 +17,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Map<String, dynamic>> signup(String fullName, String dni, String email) {
     return remoteDataSource.signup(fullName, dni, email);
+  }
+
+  @override
+  Future<User> getUser() {
+    return remoteDataSource.getUser();
   }
 }

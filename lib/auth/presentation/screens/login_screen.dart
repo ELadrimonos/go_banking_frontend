@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_banking_frontend/auth/domain/entities/token_response.dart';
 import 'package:go_banking_frontend/auth/presentation/widgets/auth_form.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_banking_frontend/core/storage/token_storage.dart';
@@ -35,11 +34,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  void _submitLogin(Map<String, String> formData) {
-    ref.read(authNotifierProvider.notifier).login(
+  Future<void> _submitLogin(Map<String, String> formData) async {
+    await ref.read(authNotifierProvider.notifier).login(
           formData['dni']!,
           formData['pin']!,
         );
+    final authState = ref.read(authNotifierProvider);
+    if (authState is AsyncData && authState.value != null) {
+      if (mounted) {
+        context.goNamed('Dashboard');
+      }
+    }
   }
 
   void _accessDirectly() {
@@ -48,6 +53,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authNotifierProvider, (previous, next) {
+      if (next is AsyncData && next.value != null) {
+        context.goNamed('Dashboard');
+      }
+      if (next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.error.toString()),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text('Iniciar Sesión')),
       body: Center(

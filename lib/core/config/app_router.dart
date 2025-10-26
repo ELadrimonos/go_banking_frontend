@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_banking_frontend/auth/presentation/providers/auth_provider.dart';
 import 'package:go_banking_frontend/auth/presentation/screens/login_screen.dart';
 import 'package:go_banking_frontend/auth/presentation/screens/signup_screen.dart';
+import 'package:go_banking_frontend/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -22,7 +23,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         name: 'Dashboard',
-        builder: (context, state) => const Placeholder(),
+        builder: (context, state) => const DashboardScreen(),
       ),
     ],
     redirect: (context, state) {

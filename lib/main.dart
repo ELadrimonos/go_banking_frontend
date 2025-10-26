@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_banking_frontend/auth/presentation/providers/auth_token_provider.dart';
 import 'package:go_banking_frontend/core/config/app_router.dart';
-import 'package:go_banking_frontend/core/storage/token_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

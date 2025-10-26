@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:go_banking_frontend/auth/domain/entities/token_response.dart';
+import 'package:go_banking_frontend/auth/domain/entities/user.dart';
 
 class AuthRemoteDataSource {
   final Dio dio;
@@ -26,5 +27,10 @@ class AuthRemoteDataSource {
       'user_id': response.data['user_id'],
       'pin': response.data['pin'],
     };
+  }
+
+  Future<User> getUser() async {
+    final response = await dio.get('/user');
+    return User.fromJson(response.data);
   }
 }
