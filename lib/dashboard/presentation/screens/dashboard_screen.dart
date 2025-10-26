@@ -14,15 +14,11 @@ class DashboardScreen extends ConsumerWidget {
     final userAsyncValue = ref.watch(userProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-      ),
+      appBar: AppBar(title: const Text('Dashboard')),
       body: Builder(
         builder: (context) {
           if (accountState.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           return Padding(
@@ -49,7 +45,13 @@ class DashboardScreen extends ConsumerWidget {
                     itemCount: accountState.accounts.length,
                     itemBuilder: (context, index) {
                       final account = accountState.accounts[index];
-                      return AccountListTile(account: account);
+                      // TODO Get stored locally account color and seed
+                      //  from account id
+                      return SizedBox(
+                        width: 400,
+                        height: 200,
+                        child: AccountListTile(account: account),
+                      );
                     },
                   ),
                 ),
@@ -67,4 +69,3 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 }
-

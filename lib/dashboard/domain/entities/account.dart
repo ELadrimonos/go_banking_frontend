@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:go_banking_frontend/core/helpers/currency_symbol.dart';
 
 class Account {
   final String id;
@@ -11,6 +14,11 @@ class Account {
     required this.currency,
     required this.accountType,
     required this.balance,
-    required this.accountNumber
+    required this.accountNumber,
   });
+
+  String get balanceCurrency => "${getCurrencyIcon(currency)} ${balance.toStringAsFixed(2)}";
+
+  String get hiddenAccountNumber =>
+      "•••• ${accountNumber.substring(max(0, accountNumber.length - 6))}";
 }

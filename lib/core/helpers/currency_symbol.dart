@@ -1,0 +1,66 @@
+String getCurrencyIcon(String currency) {
+  switch (currency) {
+    case "EUR":
+      return "€";
+    case "USD":
+      return "\$";
+    case "GBP":
+      return "£";
+    case "JPY":
+      return "¥";
+    case "CNY":
+      return "¥";
+    case "INR":
+      return "₹";
+    case "AUD":
+      return "A\$";
+    case "CAD":
+      return "C\$";
+    case "CHF":
+      return "CHF";
+    case "HKD":
+      return "HK\$";
+    case "NZD":
+      return "NZ\$";
+    case "SEK":
+      return "kr";
+    case "NOK":
+      return "kr";
+    case "DKK":
+      return "kr";
+    case "RUB":
+      return "₽";
+    case "BRL":
+      return "R\$";
+    case "ZAR":
+      return "R";
+    case "KRW":
+      return "₩";
+    case "SGD":
+      return "S\$";
+    case "MXN":
+      return "Mex\$";
+    case "TRY":
+      return "₺";
+    case "AED":
+      return "د.إ";
+    case "SAR":
+      return "﷼";
+    case "PLN":
+      return "zł";
+    case "THB":
+      return "฿";
+    case "IDR":
+      return "Rp";
+    case "MYR":
+      return "RM";
+    case "PHP":
+      return "₱";
+    case "HUF":
+      return "Ft";
+    case "CZK":
+      return "Kč";
+    default:
+      return currency;
+  }
+}
