@@ -14,26 +14,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  bool _hasToken = false;
-  final TokenStorage _tokenStorage = TokenStorage();
-
-  @override
-  void initState() {
-    super.initState();
-    _checkToken();
-  }
-
-  Future<void> _checkToken() async {
-    final token = await _tokenStorage.getRefreshToken();
-    if (token != null && token.isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          _hasToken = true;
-        });
-      }
-    }
-  }
-
   Future<void> _submitLogin(Map<String, String> formData) async {
     await ref.read(authNotifierProvider.notifier).login(
           formData['dni']!,
@@ -48,11 +28,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _accessDirectly() {
-    context.goNamed('Dashboard');
+    ref.read(authNotifierProvider.notifier).loginWithBiometrics();
   }
 
   @override
   Widget build(BuildContext context) {
+    final hasToken = ref.watch(authStateProvider);
+    print("HAS TOKEN? $hasToken");
     ref.listen(authNotifierProvider, (previous, next) {
       if (next is AsyncData && next.value != null) {
         context.goNamed('Dashboard');
@@ -78,7 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 isLogin: true,
                 onSubmit: (formData, r) => _submitLogin(formData),
               ),
-              if (_hasToken) ...[
+              if (hasToken) ...[
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _accessDirectly,

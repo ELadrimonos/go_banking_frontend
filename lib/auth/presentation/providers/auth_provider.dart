@@ -78,6 +78,24 @@ class AuthNotifier extends StateNotifier<AsyncValue<dynamic>> {
     }
   }
 
+  Future<void> loginWithBiometrics() async {
+    state = const AsyncValue.loading();
+    try {
+      // By calling getUser, we trigger the interceptor logic if the token is expired.
+      final user = await _repo.getUser();
+      // If successful, we can consider the user logged in.
+      // We don't have new tokens here, but the existing ones are validated (or refreshed).
+      state = AsyncValue.data(user); // We can put the user in the state
+    } catch (e) {
+      String errorMessage = "Session expired. Please log in again.";
+      if (e is DioException && e.response?.data != null) {
+        errorMessage = e.response?.data['error'] ?? errorMessage;
+      }
+      // The interceptor should have already cleared the tokens on refresh failure.
+      state = AsyncValue.error(errorMessage, StackTrace.current);
+    }
+  }
+
   Future<void> logout() async {
     await _tokenNotifier.clearTokens();
     state = const AsyncValue.data(null);

@@ -45,9 +45,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       if (!authState && !loggingInOrSigningUp) {
         return '/login';
       }
-      // if (authState && loggingInOrSigningUp) {
-      //   return '/';
-      // }
       return null;
     },
     refreshListenable: GoRouterRefreshStream(ref),
