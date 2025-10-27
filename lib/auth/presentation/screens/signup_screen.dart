@@ -34,7 +34,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           Navigator.of(dialogContext).pop();
           ref.read(authNotifierProvider.notifier).clearState();
           if (mounted && context.mounted) {
-            context.goNamed('Dashboard');
+            context.goNamed('Login');
           }
         },
       ),

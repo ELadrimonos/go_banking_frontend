@@ -67,11 +67,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<dynamic>> {
     try {
       final data = await _repo.signup(fullName, dni, email);
       final pin = data['pin'];
-      final tokens = await _repo.login(dni, pin);
 
       state = AsyncValue.data(SignupResult(pin: pin));
-      await _tokenNotifier.saveTokens(
-          accessToken: tokens.accessToken, refreshToken: tokens.refreshToken);
     } catch (e) {
       String errorMessage = e.toString();
       if (e is DioException && e.response?.data != null) {
